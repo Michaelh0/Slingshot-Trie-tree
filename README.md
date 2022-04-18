@@ -1,5 +1,5 @@
 # Slingshot Trie tree
-Test for Data Strucutre and Algorithms Assessment
+Test for Data Structure and Algorithms Assessment
 
 Disclaimer: My family and I had Covid-19 during the time period of my testing. I tried my best to complete everything that you asked for. 
 
