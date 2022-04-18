@@ -1,15 +1,15 @@
 //https://www.30secondsofcode.org/articles/s/js-data-structures-tree - where i found the Tree Data Structure
-// https://www.30secondsofcode.org/articles/s/js-data-structures-binary-search-tree - where i found the binary search tree
 class BinarySearchTreeNode {
   constructor(key, value = key, parent = null) {
     this.key = key;
     this.value = value;
     this.parent = parent;
     this.children = [];
+    this.end = false;
   }
 
   get hasChildren() {
-    return this.children.length === 0;
+    return !(this.children.length === 0);
   }
 }
 
@@ -55,19 +55,15 @@ class BinarySearchTree {
       }
       if (!found){
         var newLen = node.children.push(new BinarySearchTreeNode(char,char,node));
+        
         //console.log(newLen);
         node = node.children[((node.children).length)-1];
+        if (count == key.length)
+          node.end = true;
         //console.log(node);
       }
     }
     
-  }
-
-  has(key) {
-    for (let node of this.postOrderTraversal()) {
-      if (node.key === key) return true;
-    }
-    return false;
   }
 
   find(key) {
@@ -81,9 +77,22 @@ class BinarySearchTree {
 
   remove(key) {
     let node = this.root;
+    let start;
+    let startFound = false;
+    let startCount = 1;
     for (let count = 1; count <= key.length; count++) {
       var char = key.substr(0,count);
       var found = false;
+      console.log(node.children.length);
+      if(node.children.length == 1 && !startFound){
+        start = node;
+        startFound= true;
+        startCount = count;
+        console.log(start);
+      }
+      if(node.children.length > 1 && startFound)
+        startFound = !startFound;
+        
       for (var i = 0; i < node.children.length; i++)
       {
         if (node.children[i].key == char){
@@ -92,14 +101,30 @@ class BinarySearchTree {
           found = !found;
         }
       }
-      console.log(found);
       if (!found && node.children.length > 0){
         return false;
       }
     }
-    node = node.parent;
-    node.children = [];
-    return true;
+    if(node.end){
+      if(start != this.root){
+        node = start.parent;
+        const arr = node.children;
+        var char = key.substr(0,startCount-1);
+        console.log(startCount);
+        for(var i = node.children.length -1; i >= 0; i--){
+          if (arr[i].key == char){
+            arr[i] = arr[node.children.length -1];
+            arr.pop();
+          }
+        }
+        node.children = arr;
+      }
+      else
+        start.children = [];      
+      return true;
+    }
+    return false;
+    
   }
 }
 
