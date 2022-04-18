@@ -1,8 +1,8 @@
 //https://www.30secondsofcode.org/articles/s/js-data-structures-tree - where i found the Tree Data Structure
 class BinarySearchTreeNode {
-  constructor(key, value = key, parent = null) {
+  constructor(key/*, value = key*/, parent = null) {
     this.key = key;
-    this.value = value;
+    //this.value = value;
     this.parent = parent;
     this.children = [];
     this.end = false;
@@ -36,7 +36,7 @@ class BinarySearchTree {
     yield node;
   }
 
-  insert(key, value = key) {
+  insert(key/*, value = key*/) {
     let node = this.root;
     
     for (let count = 1; count <= key.length; count++) {
@@ -54,7 +54,7 @@ class BinarySearchTree {
         }
       }
       if (!found){
-        var newLen = node.children.push(new BinarySearchTreeNode(char,char,node));
+        var newLen = node.children.push(new BinarySearchTreeNode(char/*,char*/,node));
         
         //console.log(newLen);
         node = node.children[((node.children).length)-1];
@@ -66,12 +66,18 @@ class BinarySearchTree {
     
   }
 
+  has(key)
+  {
+    for (let node of this.postOrderTraversal()) {
+      if (node.key === key) return true;
+    }
+    return false;
+  }
+
   find(key) {
     for (let node of this.postOrderTraversal()) {
       if (node.key === key) return node;
-      console(key);
     }
-    console(key);
     return undefined;
   }
 
@@ -172,7 +178,7 @@ function displayArr(input)
 }
 
 document.getElementById("displaybtn").addEventListener("click",function(){
-  displayArr([...tree.preOrderTraversal()].map(x => x.value));
+  displayArr([...tree.preOrderTraversal()].map(x => x.key));
 });
 
 document.getElementById("autocompletebtn").addEventListener("click",function(){
@@ -197,7 +203,7 @@ document.getElementById("searchbtn").addEventListener("click",function(){
 });
 
 function autocomplete(value){
-  let array = [...tree.preOrderTraversal()].map(x => x.value);
+  let array = [...tree.preOrderTraversal()].map(x => x.key);
   let pureElement = document.getElementById("pureOutput");
   pureElement.innerHTML = "";
   for (var i =0; i < array.length; i++){
